@@ -5,7 +5,11 @@
     - 将字段声明为private[this]就不会生成getter、setter方法
     - val声明的字段只有getter
 - private[this] 对象私有字段（方法只能访问该对象的字段），默认场景下为类私有字段（方法可以访问该类所有对象的字段）。private[Class_Name]可以对允许访问的类赋权
+    - private val balance: 伴生对象可以访问
+    - private[this] val balance: 伴生对象无法访问
+    
 - 使用@BeanProperty修饰字段时，额外生成get/set方法
+    - private 字段无法用@BeanProperty修饰
 - 构造器
     - 主构造器
         - 默认场景下主构造器无参数
