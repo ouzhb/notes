@@ -1,0 +1,28 @@
+---
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: glusterfs-cluster
+  namespace: assurance
+subsets:
+  - addresses:
+      - ip: 172.24.33.23
+    ports:
+      - port: 27000
+  - addresses:
+      - ip: 172.24.33.24
+    ports:
+      - port: 27000
+  - addresses:
+      - ip: 172.24.33.25
+    ports:
+      - port: 27000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: glusterfs-cluster
+  namespace: assurance
+spec:
+  ports:
+    - port: 27000
