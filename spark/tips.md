@@ -41,3 +41,12 @@ spark-submit时需要添加外部依赖可以用 --driver-class-path 以及 spar
 或者使用--jars（该参数后的jar包会自动被添加到classpath）
 
 对worker和master添加依赖可以用环境变量SPARK_DAEMON_CLASSPATH
+
+## 流处理Batch性能调优
+观察每个Batch的时间，可能出现所有job时间之和，远远小于Batch总时间的状况。
+原因是：Batch Time = Job Time + Driver Time
+即Driver的资源可能不太够！！
+
+--driver-cores
+--driver-memory
+--executor-memory

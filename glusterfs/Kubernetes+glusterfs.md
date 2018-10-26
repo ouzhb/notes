@@ -42,6 +42,7 @@ metadata:
   name: glusterfs-vol-test
   namespace: assurance
 spec:
+  hostNetwork: true
   containers:
   - name: glusterfs-vol-test
     command:
@@ -56,8 +57,7 @@ spec:
   volumes:
   - glusterfs:
       endpoints: glusterfs-cluster
-      path: gv0
-      readOnly: true
+      path: gv1
     name: glusterfs-vol
 ```
 ## Glusterfs Persistent Volumes
