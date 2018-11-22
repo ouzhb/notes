@@ -18,7 +18,7 @@ volumes支持[多种类型](https://kubernetes.io/docs/concepts/storage/volumes/
 |[hostPath](https://kubernetes.io/docs/concepts/storage/volumes/#hostpath)|最常用！！！|
 |[projected](https://kubernetes.io/docs/concepts/storage/volumes/#projected)|允许用户挂载secret、downwardAPI、configMap到pod内部|
 |[glusterfs](https://kubernetes.io/docs/concepts/storage/volumes/#glusterfs)|挂载glusterfs预先创建的Volumes|
-|||
+
 
 ## Persistent Volumes + PersistentVolumeClaims
 
@@ -69,6 +69,7 @@ PV和PVC相比于Volumes的优势在于，以下几点：
 StorageClass为用户提供了一种描述底层存储类型的方法，可以认为是glusterfs、Ceph、S3等存储设备，对接到K8S的配置文件。
 
 StorageClass包括以下字段：
+
 |字段|说明|
 |----|----|
 |Provisioner|表示StorageClass所需要使用的存储插件。Kubernetes内部提供的插件以kubernetes.io开头。[参考](https://kubernetes.io/docs/concepts/storage/storage-classes/#the-storageclass-resource)。用户也可以使用[外部存储插件](https://github.com/kubernetes-incubator/external-storage).|
@@ -77,7 +78,7 @@ StorageClass包括以下字段：
 |Volume Binding Mode|默认情况下为Immediate，表示一旦创建了PVC，就会发生卷绑定和动态配置。此外还有WaitForFirstConsumer|
 |Allowed Topologies|拓扑限定|
 |parameters|与存储后端相关的配置|
-|||
+
 
 ## 参考
 
