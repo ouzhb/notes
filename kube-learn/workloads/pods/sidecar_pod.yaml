@@ -7,6 +7,7 @@ spec:
     - name: cache-volume
       emptyDir: {}
   containers:
+    # 主容器，负责对外提供业务
     - name: main-container
       image: nginx
       ports:
@@ -15,6 +16,7 @@ spec:
       volumeMounts:
         - mountPath: "/usr/share/nginx/html"
           name: cache-volume
+    # 辅助容器，负责更新共享配置等操作
     - name: sidecar-pod
       image: centos
       volumeMounts:

@@ -1,4 +1,4 @@
-# Pod
+# OverView
 
 Pod中的容器共享网络空间（IP和端口号），并且可以使用 SystemV 信号量和 POSIX 共享内存进行通信。
 
@@ -81,6 +81,14 @@ pod运行前可以通过preset信息注入到Pod中。
 - Preset似乎一旦生成无法修改
 - Preset 只能在Pod生成时注入信息。
 - 当在Deploy中使用preset时，删除POD时新POD会重新加载Preset的内容
+
+# Disruptions
+
+Pod中断包括：自愿中断和非自愿中断。使用PodDisruptionBudget对象可以控制Pod自愿中断时，一次删除Pod的数目。
+
+假设pod配置spec.replicas=5，当用户使用kubectl drain命令（让主机进入维护模式）时，Kubernetes可能一次关闭5个Pod，并在另一个node一次启动5个pod。
+
+假设配置PDB保证最小Pod数目为4，那么kubectl drain命令一次只会关闭一个Pod，线上提供服务的Pod始终不小于4个。
 
 
 # Pod的设计模式
