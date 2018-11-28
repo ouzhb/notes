@@ -31,8 +31,9 @@ PS: 关于Headless Service，即将clusterip指定为None的Service。用户没�
 
 ### Stable Storage
 
-- StatefulSets使用 .spec.volumeClaimTemplates ,根据这个模板每个Pod会创建独立的PVC
+- StatefulSets使用 .spec.volumeClaimTemplates ,根据这个模板每个Pod会创建独立的PVC（名称为：${volumeClaimTemplates-name}-{pod-name}）
 - 当Pod被重新调度或者删除时，该Pod专用的PVC不会变化。
+- 
 
 ### Pod Name Label
 
