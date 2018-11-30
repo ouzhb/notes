@@ -5,7 +5,28 @@
 
 # Helm包依赖关系
 
+## 通过 requirements.yaml
 
+基本用法：
+
+```yaml
+dependencies:
+# 创建依赖，依赖apache-1.2.3
+  - name: apache
+    version: 1.2.3
+    repository: http://example.com/charts
+# 依赖本地目录的mysql-0.1.0
+  - name: mysql
+    version: "0.1.0"
+    repository: "file://../mysql"
+```
+``` yaml
+# 安装带依赖的chart需要先构建chart的依赖项，执行以下命令：
+helm dependency build charts/myapp
+# 上面的命令自动下载子chart到父chart的charts目录！
+```
+
+requirements.yaml的特点：
   - conditions条件只要设定了（同时在values中能找到相应的值），必定覆盖tags条件；
   - 如果第一个Condition生效了，会忽略后续的Condition配置；
   - 如果任何chart的tag为真，则启用chart
@@ -34,8 +55,9 @@ A-Service
 B-Service
 
 ```
-
-## exports format
+## Values 导入
+下面两种模式可以将子Chart中的配置导入到父Chart中，使父chart可以控制子chart的运行参数。
+### exports format
 
 如果子 chart中values顶层包含exports 字段，那么exports 字段的内容可以直接导入父chart的任意字段中。
 
@@ -56,7 +78,7 @@ myint: 99
 
 ```
 
-## child-parent format
+### child-parent format
 
 ```yaml
 # parent's requirements.yaml file
@@ -90,3 +112,6 @@ myimports:
   mybool: true
   mystring: "helm rocks!"
 ```
+# 未完待续
+
+https://github.com/helm/helm/blob/master/docs/charts.md#the-chartyaml-file
