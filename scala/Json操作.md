@@ -22,6 +22,7 @@ val json1 = jsonAst.compactPrint //输出一行
 ```
 ### scala的任意类型和Json AST转换
     调用其toJson方法将scala的任意类型转换为一个Json AST
+    
     调用convertTo方法将JSON AST 转换为Scala object
 
 上面的操作需要提供JsonFormat[T]进行类型转换
