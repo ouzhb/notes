@@ -1,7 +1,3 @@
-# Chart.yaml 文件字段参考
-
-
-[参考](https://github.com/helm/helm/blob/master/docs/charts.md#the-chartyaml-file)
 
 # Helm包依赖关系
 
@@ -46,7 +42,7 @@ service "A-Service"
 namespace "B-Namespace"
 replicaset "B-ReplicaSet"
 service "B-Service"
-# B 依赖 A 对象的创建顺序如下：
+# A 依赖 B 对象的创建顺序如下：这里有一个疑惑，创建顺序似乎与谁依赖谁无关，而是谁的name排序在前面，谁先创建！？？参考:https://github.com/helm/helm/blob/master/docs/charts.md#operational-aspects-of-using-dependencies
 A-Namespace
 B-Namespace
 A-StatefulSet
@@ -112,6 +108,7 @@ myimports:
   mybool: true
   mystring: "helm rocks!"
 ```
-# 未完待续
+## 通过charts目录手工管理
 
-https://github.com/helm/helm/blob/master/docs/charts.md#the-chartyaml-file
+- 在charts目录下的子Chart可以是tgz格式的压缩包，或者chart目录，但是这些文件不能以"_"或者"."开头。
+- 
