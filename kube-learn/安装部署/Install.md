@@ -137,6 +137,7 @@ ip link delete docker0
 ## 安装Kubernetes集群
 
 添加Kubernetes官方源后，可以找到以下两个rpm：
+
 |rpm包名|包含组件|备注|
 |----|----|----|
 |kubernetes-master|kube-apiserver、kube-controller-manager、kube-scheduler||
