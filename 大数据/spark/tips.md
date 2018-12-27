@@ -20,8 +20,16 @@ SPARK_MASTER_OPTS以及SPARK_MASTER_OPTS
 ```
 ## GC日志配置
 
-–conf spark.driver.extraJavaOptions="-XX:+PrintGCDetails -XX:+PrintGCTimeStamps "
--conf spark.executor.extraJavaOptions="-XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
+–conf spark.driver.extraJavaOptions="-XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:../logs/gc.log"
+-conf spark.executor.extraJavaOptions="-XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Xloggc:../logs/gc.log"
+
+## JMX配置
+
+--conf spark.driver.extraJavaOptions="-Dcom.sun.management.jmxremote.port=12345 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
+--conf spark.executor.extraJavaOptions="-Dcom.sun.management.jmxremote.port=12345 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
+
+## 打开jstatd
+echo 'grant codebase "file:${java.home}/../lib/tools.jar" {permission java.security.AllPermission;};' > $JAVA_HOME/bin/jstatd.all.policy && jstatd -J-Djava.security.policy=$JAVA_HOME/bin/jstatd.all.policy -p 22030
 
 ## Spark 推测执行
 
@@ -50,3 +58,10 @@ spark-submit时需要添加外部依赖可以用 --driver-class-path 以及 spar
 --driver-cores
 --driver-memory
 --executor-memory
+
+## 源码编译
+
+ 编译spark 1.6.3
+
+./make-distribution.sh --tgz --name with-hadoop-2.7.7 --mvn /opt/apache-maven-3.6.0/bin/mvn -Dhadoop.version=2.7.7
+

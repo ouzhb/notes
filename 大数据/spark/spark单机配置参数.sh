@@ -1,0 +1,35 @@
+spark-submit --class com.ruijie.idata.spark.job.dw.IDataStream \
+--master local[*] \
+--driver-memory 1g \
+--name "IDataStream" \
+--conf spark.ui.port=8081 \
+--conf spark.scheduler.mode=FIFO \ # 默认配置
+--conf spark.shuffle.manager=sort \ # 默认配置就是sort，而非hash
+--conf spark.default.parallelism=1 \ # 配置成1不一定生效，需要参考代码中的配置
+--conf spark.sql.shuffle.partitions=4 \
+--conf spark.memory.storageFraction=0.3 \ # 默认0.5，该配置值越高，用于进行worker作业的内存越小，越容易spill磁盘（另一个参数参考spark.memory.fraction）
+--conf spark.localExecution.enabled=true \ # 允许默认写job在driver运行，但是这个配置是1.3的配置，之后的版本没有出现在官方配置文档中
+--conf spark.locality.wait=0s \ 默认3s，指的是当能够进行数据本地运算时，还经过多长时间结束已经运行的非本地化任务。个人认为单节点时，该配置用处不大。（本地化包括：process-local（同一个executor）、node-local、rack-local、Any）
+--conf spark.local.dir=/tmp/spark,/data/wis/spark/tmp \ 有条件的话应该配置性能最好的目录
+--conf spark.executor.logs.rolling.strategy=time \ # local模式下运行只有一个driver进程，没有executor的概念。个人认为spark.executor打头的配置用处不大
+--conf spark.executor.logs.rolling.time.interval=daily \
+--conf spark.executor.logs.rolling.maxRetainedFiles=10 \
+--conf spark.streaming.concurrentJobs=1 \ #默认就是1 
+--conf spark.streaming.backpressure.enabled=true \
+--conf spark.streaming.ui.retainedBatches=300 \ #建议：将spark.ui.retainedJobs、spark.ui.retainedStage、spark.sql.ui.retainedExecutions 调低，这样可以节约driver的内存
+--conf spark.ui.retainedStages=300 \ 同上
+--conf spark.streaming.blockInterval=500ms \
+--conf spark.shuffle.consolidateFiles=true \ # 1.3版本中建议设定为true，能够提升shuffle性能，但是1.6.3的配置，之后的版本没有出现在官方配置文档中
+--conf spark.shuffle.file.buffer=1024k \ # 默认32k，一次写入的最大缓存
+--conf spark.reducer.maxSizeInFlight=128m \ # 默认48m，一次拉取的最大缓存
+--conf spark.shuffle.sort.bypassMergeThreshold=100 \
+--conf spark.ui.showConsoleProgress=false \
+--conf spark.driver.extraJavaOptions="-Xss256k \
+-XX:MetaspaceSize=128M -XX:MaxMetaspaceSize=256m \
+-XX:+UseConcMarkSweepGC -XX:MaxTenuringThreshold=2 \
+-XX:+UseCompressedOops -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv6Addresses=false \
+-Dfile.encoding=UTF-8" \
+--conf spark.executor.extraJavaOptions="-Xss256k -XX:MetaspaceSize=128M -XX:MaxMetaspaceSize=256m \
+-XX:+UseConcMarkSweepGC -XX:MaxTenuringThreshold=2 -XX:+UseCompressedOops \
+-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Djava.net.preferIPv6Addresses=false -Dfile.encoding=UTF-8" \
+/opt/linyuliang/idata-spark1-2.0-SNAPSHOT-all.jar -s 20
