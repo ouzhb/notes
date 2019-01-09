@@ -133,5 +133,65 @@ drop 'test'
 
 ```
 
+## 伪分布式
 
+HBase依然运行在单个节点上，但是不同角色运行在不同的JVM进程中。
 
+hbase-site.xml中添加以下配置：
+
+```xml
+<property>
+  <name>hbase.cluster.distributed</name>
+  <value>true</value>
+</property>
+
+<property>
+  <name>hbase.rootdir</name>
+  <value>hdfs://hdfs-k8s/hbase</value>
+</property>
+</configuration>
+
+```
+
+之后执行bin/start-hbase.sh命令即可启动相关进程，还可以使用 local-master-backup.sh 和 local-regionservers.sh 启动备份的master以及多个regionservers。
+
+## 完全分布式
+
+参考以下组网方式
+
+|Node Name|Master|ZooKeeper|RegionServer|
+|-----|-----|-----|-----|
+|node1|yes|yes|no|
+|node2|backup|yes|yes|
+|node3|no|yes|yes|
+
+部署包括以下步骤：
+
+1. 节点配置互信
+2. 修改 node1 中的 conf/regionservers 添加 node2、node3
+3. 在 node1 创建 conf/backup-masters 添加 node2
+4. 添加zookeeper的配置
+```xml
+<property>
+  <name>hbase.zookeeper.quorum</name>
+  <value>node-a.example.com,node-b.example.com,node-c.example.com</value>
+</property>
+<property>
+  <name>hbase.zookeeper.property.dataDir</name>
+  <value>/usr/local/zookeeper</value>
+</property>
+```
+5. 拷贝配置文件到node2和node3
+6. start-hbase.sh
+
+# 参考资料
+
+[架构说明](http://hbase.apache.org/book.html#_architecture)
+
+[配置文件说明](http://hbase.apache.org/book.html#_configuration_files)
+
+[基础参数的配置](http://hbase.apache.org/book.html#basic.prerequisites) : JDK版本、DNS、NTP、文件句柄数以及进程数配置
+
+[Hadoop 配置](http://hbase.apache.org/book.html#hadoop) ： 版本适配，建议使用hadoop 2.7.1+
+
+[配置项说明](http://hbase.apache.org/book.html#config.files)
